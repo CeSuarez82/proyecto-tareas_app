@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{%block titulo %}
+Agregar Tarea
+{% endblock %}
+
+{%block contenido %}
+<H1>Tarea Update</H1>
+<form method="post">
+    <input type="number" name="txtid" value="{{tarea.id}}" readonly="true"/>
+    <input type="text" name="txttitulo" value = "{{tarea.titulo}}" placeholder="Titulo de la Tarea"/>
+    <input type="text" name ="txtdescripcion"value = "{{tarea.descripcion}}" placeholder="Descripcion de la Tarea"/>
+    <button type="reset" class="btn btn-danger">Cancelar</button>
+    <button type="submit" class="btn btn-primary">Modificar</button>
+</form>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{%block titulo %}
+Agregar Usuario
+{% endblock %}
+
+{%block contenido %}
+
+<form method="post">
+    <input type="number" name="txtid" required><br>
+    <input type="text" name="txtusername" placeholder="Username" required><br>
+    <input type="email" name="txtemail" placeholder="email@email.com" required><br>
+    <input type="password" name="txtpassword" required><br>
+    <input type="checkbox" name="txtis_admin"><br><br>
+
+    <button type="reset" class="btn btn-secondary">Reset</button>
+    <button type="submit" class="btn btn-primary">Aceptar</button>
+
+
+
+</form>
+
+{% endblock %}

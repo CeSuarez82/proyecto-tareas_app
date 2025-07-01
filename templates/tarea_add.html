@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{%block titulo %}
+Agregar Tarea
+{% endblock %}
+
+{%block contenido %}
+<H1>Tarea ADD</H1>
+<form method="post">
+    <input type="number" name="txtid"/>
+    <input type="text" name="txttitulo" placeholder="Titulo de la Tarea"/>
+    <input type="text" name ="txtdescripcion" placeholder="Descripcion de la Tarea"/>
+    <button type="reset" class="btn btn-danger">Cancelar</button>
+    <button type="submit" class="btn btn-primary">Agregar</button>
+
+</form>
+{% endblock %}
