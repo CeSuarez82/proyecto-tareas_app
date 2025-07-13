@@ -1,4 +1,4 @@
-## TAREA APP - Agenda de Tareas con Flask
+## TAREA APP - Agenda de Tareas con Flask Actualizado
 
 Aplicación web desarrollada en **Flask** que permite permita la gestión de usuarios y tareas mediante operaciones CRUD (Crear, Leer, Actualizar y Eliminar). Cuenta con una interfaz sencilla y funcional.
 
@@ -12,7 +12,7 @@ Antes de ejecutar el proyecto, asegúrate de tener instalado:
 ## Instalación
 1. **Clona este repositorio o descarga el código fuente**:
 
-git clone https://github.com/tu_usuario/tarea_app.git
+git clone https://github.com/CeSuarez82/proyecto-tareas_app.git
 cd tarea_app
 
 2. Crea un entorno virtual (opcional pero recomendado):
