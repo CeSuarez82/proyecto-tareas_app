@@ -21,9 +21,8 @@ class Usuario(UserMixin, db.Model):
     tareas = db.relationship('Tarea', backref='usuario', lazy=True)
     
 
-
 class Tarea(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     titulo = db.Column(db.String(100), nullable=False)
     descripcion = db.Column(db.Text)
     fecha_creacion = db.Column(db.DateTime, default=datetime.datetime.now())
@@ -31,11 +30,9 @@ class Tarea(db.Model):
 
 
 
-
 @login_manager.user_loader
 def load_user(user_id):
     return Usuario.query.get(int(user_id))
-
 
 
 # rutas
@@ -54,12 +51,12 @@ def tarea_add():
             id=request.form.get('txtid')
             titulo=request.form.get('txttitulo')
             descripcion=request.form.get('txtdescripcion')
-            obj= Tarea(id=id, titulo=titulo, descripcion=descripcion,usuario_id=current_user.id, user = current_user)
+            obj= Tarea(titulo=titulo, descripcion=descripcion,usuario_id=current_user.id)
             db.session.add(obj)
             db.session.commit()
             return redirect(url_for('tarea_read'))
         except Exception as e :
-            flash('Error') 
+            return redirect('error.html',error=e)
     return render_template("tarea_add.html", user = current_user)
 
 
@@ -108,13 +105,18 @@ def logout():
 @login_required
 def usuario_add():
     if request.method=="POST":
-        id = request.form.get('txtid')
+        # id = request.form.get('txtid')
         username = request.form.get('txtusername')
         email = request.form.get('txtemail')
         password = generate_password_hash(request.form.get('txtpassword'))
         is_admin = True if request.form.get('txtis_admin')=='on' else False
+        if Usuario.query.filter_by(username=username).first():
+            return render_template('usuario_add.html', error="El nombre de usuario ya existe.", user=current_user)
+        if Usuario.query.filter_by(email=email).first():
+            return render_template('usuario_add.html', error="El correo ya está registrado.", user=current_user)
+        
         obj = Usuario(
-                id=id,
+                #id=id,
                 username=username,
                 email=email,
                 password=password,
@@ -132,6 +134,54 @@ def usuario_add():
 def usuario_read():
     usuarios = Usuario.query.all()
     return render_template('usuario_read.html',usuarios=usuarios, user = current_user)
+
+
+@app.route("/usuario_update/<int:id>", methods=['GET','POST'])
+@login_required
+def usuario_update(id):
+    try:
+        objUsuario = Usuario.query.filter_by(id=id).first()
+        if request.method == 'POST':
+            objUsuario.username = request.form.get('txtusername')
+            objUsuario.email = request.form.get('txtemail')
+            objUsuario.is_admin = True if request.form.get('txtis_admin') == 'on' else False
+            db.session.commit()
+            return redirect(url_for('usuario_read'))
+        return render_template('usuario_update.html', usuario=objUsuario, user=current_user)
+    except Exception as e:
+        db.session.rollback()
+        return render_template('error.html', error=str(e), user=current_user)
+    
+
+@app.route("/usuario_delete/<int:id>", methods=['GET', 'POST'])
+@login_required
+def usuario_delete(id):
+    try:
+        objUsuario = Usuario.query.filter_by(id=id).first()
+
+        # Verificar si el usuario existe
+        if objUsuario is None:
+            raise Exception("⚠️ Usuario no encontrado.")
+
+        # Evitar que un usuario se elimine a sí mismo
+        if current_user.id == objUsuario.id:
+            raise Exception("❌ No puedes eliminar tu propio usuario.")
+
+        # Evitar eliminar al usuario admin por defecto
+        if objUsuario.id == 1:
+            raise Exception("❌ No se permite eliminar el usuario administrador por defecto.")
+
+        # Eliminar primero las agendas asociadas
+        Tarea.query.filter_by(usuario_id=objUsuario.id).delete()
+        # Eliminar el usuario
+        db.session.delete(objUsuario)
+        db.session.commit()
+
+        return redirect(url_for('usuario_read'))
+
+    except Exception as e:
+        db.session.rollback()
+        return render_template('error.html', error=str(e), user=current_user)
 
 if __name__=="__main__":
     with app.app_context():

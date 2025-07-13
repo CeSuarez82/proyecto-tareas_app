@@ -1,22 +1,79 @@
 {% extends "base.html" %}
-{%block titulo %}
+{% block titulo %}
 Agregar Usuario
 {% endblock %}
 
-{%block contenido %}
+{% block contenido %}
+<H1 class="animate__animated animate__bounce">Hola, {{user.username }}</H1> <br>
+<div class="container mt-4">
 
-<form method="post">
-    <input type="number" name="txtid" required><br>
-    <input type="text" name="txtusername" placeholder="Username" required><br>
-    <input type="email" name="txtemail" placeholder="email@email.com" required><br>
-    <input type="password" name="txtpassword" required><br>
-    <input type="checkbox" name="txtis_admin"><br><br>
+    <h2 class="mb-4">Agregar nuevo usuario</h2>
 
-    <button type="reset" class="btn btn-secondary">Reset</button>
-    <button type="submit" class="btn btn-primary">Aceptar</button>
+    {# ALERTAS CON FLASH DE FLASK #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
+    <form method="post" class="needs-validation border p-4 rounded bg-light shadow-sm" novalidate>
 
+        <div class="mb-3">
+            <label for="username" class="form-label">Nombre de usuario:</label>
+            <input type="text" name="txtusername" id="username" class="form-control" placeholder="Username" required>
+            <div class="invalid-feedback">
+                Por favor ingresa un nombre de usuario.
+            </div>
+        </div>
 
-</form>
+        <div class="mb-3">
+            <label for="email" class="form-label">Correo electrónico:</label>
+            <input type="email" name="txtemail" id="email" class="form-control" placeholder="email@email.com" required>
+            <div class="invalid-feedback">
+                Ingresa un correo electrónico válido.
+            </div>
+        </div>
 
+        <div class="mb-3">
+            <label for="password" class="form-label">Contraseña:</label>
+            <input type="password" name="txtpassword" id="password" class="form-control" required>
+            <div class="invalid-feedback">
+                Debes ingresar una contraseña.
+            </div>
+        </div>
+
+        <div class="form-check mb-3">
+            <input type="checkbox" name="txtis_admin" id="is_admin" class="form-check-input">
+            <label for="is_admin" class="form-check-label">¿Es administrador?</label>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="reset" class="btn btn-secondary">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Aceptar</button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+// Validación Bootstrap en el cliente
+(() => {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
 {% endblock %}

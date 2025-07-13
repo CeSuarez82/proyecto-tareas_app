@@ -4,7 +4,8 @@ Agregar Tarea
 {% endblock %}
 
 {%block contenido %}
-<H1>Tarea ADD</H1>
+<H1 class="animate__animated animate__bounce">Hola, {{user.username }}</H1> <br>
+<H1>Puedes agregar tareas</H1> <br>
 <form method="post">
     <input type="number" name="txtid"/>
     <input type="text" name="txttitulo" placeholder="Titulo de la Tarea"/>

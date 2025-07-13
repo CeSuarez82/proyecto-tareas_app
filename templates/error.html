@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{%block titulo %}
+Error Controlado
+{% endblock %}
+
+{%block contenido %}
+<div class="alert alert-danger mt-4">
+    <h4>⚠️ Ocurrió un error</h4>
+    <p>{{ error }}</p>
+    <a href="{{ url_for('tarea_read') }}" class="btn btn-primary mt-3">Volver al inicio</a>
+</div>
+
+{% endblock %}

@@ -4,6 +4,7 @@ Usuarios
 {% endblock %}
 
 {%block contenido %}
+<H1 class="animate__animated animate__bounce">Hola, {{user.username }}</H1> <br>
 
 <a href="usuario_add"><button class="btn btn-primary"><i class="bi bi-person-fill-add"></i></button></a><br>
 <!-- {{usuarios}} -->
@@ -21,12 +22,13 @@ Usuarios
     <tbody>
         {% for u in usuarios %}
         <tr>
-            <th scope="col">{{u.id}}</th>
-            <th scope="col">{{u.username}}</th>
-            <th scope="col">{{u.email}}</th>
-            <th scope="col">{{u.is_admin}}</th>
-            <th scope="col"><a href="tarea_delete/{{u.id}}"><button class="btn btn-danger">Eliminar</button></a><a
-                    href="tarea_update/{{u.id}}"><button class="btn btn-success">Modificar</button></a><br></th>
+            <td scope="col">{{u.id}}</td>
+            <td scope="col">{{u.username}}</td>
+            <td scope="col">{{u.email}}</td>
+            <td scope="col">{{u.is_admin}}</td>
+            <td scope="col"><a href="{{ url_for('usuario_delete', id=u.id) }}"><button class="btn btn-danger">Eliminar</button></a>            
+                            <a href="{{ url_for('usuario_update', id=u.id) }}"><button class="btn btn-success">Modificar</button></a>
+            </td>   
         </tr>
         {% endfor %}
 
